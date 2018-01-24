@@ -1,60 +1,58 @@
 var notas = [];
 
 function atualizarSecao(secao) {
-    //criar uma variavel que vai guardar o html de todas as notas que devem aparecer na tela
+    // criar uma variavel que var guardar o html de todas as notas que devem aparecer na tela
+    var conteudoSecao = "";
 
-    var htmlNotas = "";
-
-    //percorrer a lista de notas e criar o template de cada nota, criar o html de cada nota e colocar na variavel 
-    for (var i = 0; i < notas.length; i++) {
-        htmlNotas += '<form class="note" onclick="editarFormulario()">' +
-                        '<button class="note__control" type="button" onclick="removerNota(' + i + ', this.form.parentElement)">' +
-                            '<i class="fa fa-times" aria-hidden="true"></i>' +
-                        '</button>' +
-                        '<h1 class="note__title">' + notas[i].titulo + '</h1>' + 
-                         '<p class="note__body">' + notas[i].texto +
-                         '</p>' + 
-                    '</form>'
-
+    // percorrer cada item da lista de notas, criar o html de cada nota, e colocar na variavel acima
+    for (var posicao=0; posicao < notas.length; posicao++) {
+        if (notas[posicao].editando) {
+            // template input + textarea
+        } else {
+            conteudoSecao += '<form class="note" onclick="editaFormulario()">'+
+                                '<button class="note__control" type="button" onclick="removerNota(' + posicao + ', this.form.parentElement)">'+
+                                    '<i class="fa fa-times" aria-hidden="true"></i>'+
+                                '</button>'+
+                                '<h1 class="note__title">' + notas[posicao].titulo + '</h1>'+
+                                '<p class="note__body">' + notas[posicao].texto + '</p>'+
+                            '</form>';
+        }
     }
-    //colocar o html de todo mundo dentro da secao
-    secao.innerHTML = htmlNotas;
 
+    // colocar o html de todo mundo dentro (inner) da secao
+    secao.innerHTML = conteudoSecao;
 }
 
-function editarFormulario(i){
-    //pegar a nota e setar editando = true
-    notas[i].editando = true
-    
-    //chamar o atualiza tela
+function editaFormulario(posicao, secao) {
+    // pegar notar e setar editando = true
+    notas[posicao].editando = true;
+
+    // chamo o atualiza tela
     atualizarSecao(secao);
-
-
 }
 
 function adicionarNota(inputTitulo, textareaTexto, formulario, secao) {
-    //criar uma variavel nota
+    // criar uma variavel nota
     var nota = {
         titulo: inputTitulo.value,
-        texto: textareaTexto.value
+        texto: textareaTexto.value,
+        editando: false
     };
 
-    //adicionar nota dentro da lista
+    // adicionar nota dentro da lista
     notas.push(nota);
 
-    //atualizar a secao de notas
+    // atualizar a secao de notas
     atualizarSecao(secao);
 
-    //limpar o formulario
-    formulario.reset(secao);
+    // limpar o formulario
+    formulario.reset();
 }
 
-function removerNota(i, secao){
-    //remover nota da lista de notas
+function removerNota(posicao, secao) {
+    // remover nota da lista de notas
+    notas.splice(posicao, 1);
 
-    notas.splice(i, 1)
-
-    //atualizar tela
-
-    atualizarSecao(secao)
+    // atualizar tela
+    atualizarSecao(secao);
 }
